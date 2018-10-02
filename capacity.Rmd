@@ -3,7 +3,6 @@ title: "Capacity Assesment Survey Results"
 author: "gabriel_mutua"
 date: "September 21, 2018"
 output:
-  word_document: default
   html_document: default
 ---
 
@@ -22,6 +21,7 @@ The analysis below was done on 43 responses from MLIS team members.
 #load libraries
 library(ggplot2)
 library(dplyr)
+library(shiny)
 library(reshape2)
 library(plotly)
 library(kableExtra)
@@ -68,7 +68,7 @@ p = ggplot(unique_dpt, aes(department, count, fill = department)) +
     )
   )
 
-ggplotly(p) %>% config(displayModeBar = F) %>% layout(legend = list(x = 0, y = 1))
+div(ggplotly(p) %>% config(displayModeBar = F) %>% layout(legend = list(x = 0, y = 1)), align = "center")
 
 ```
 
@@ -122,7 +122,7 @@ p = ggplot(unique_unit, aes(unit, count, fill = unit)) +
     )
   )
 
-ggplotly(p) %>% config(displayModeBar = F) %>% layout(legend = list(x = 1, y = 1))
+div(ggplotly(p) %>% config(displayModeBar = F) %>% layout(legend = list(x = 1, y = 1)),align = "center")
 
 ```
 
@@ -212,7 +212,7 @@ p = ggplot(data = bxplt_data, aes(group, value, fill = group)) +
     )
   )
 
-ggplotly(p) %>% config(displayModeBar = F) %>% layout(legend = list(x = 1, y = 1))
+div(ggplotly(p) %>% config(displayModeBar = F) %>% layout(legend = list(x = 1, y = 1)), align = "center")
 
 ```
 
@@ -293,11 +293,7 @@ p = ggplot(shp_training, aes(unit, value, fill = variable)) +
       size = 12,
       face = "bold"
     ),
-    legend.title = element_text(
-      colour = "#FE6F88",
-      size = 12,
-      face = "bold"
-    ),
+    legend.title = element_blank(),
     legend.text = element_text(
       colour = "#7F7F7F",
       size = 9,
@@ -305,7 +301,7 @@ p = ggplot(shp_training, aes(unit, value, fill = variable)) +
     )
   )
 
-ggplotly(p) %>% config(displayModeBar = F) %>% layout(legend = list(x = 1, y = 1))
+div(ggplotly(p) %>% config(displayModeBar = F) %>% layout(legend = list(x = 1, y = 1)),align = "center")
 
 ```
 
@@ -389,7 +385,7 @@ avarage_research <- avarage_research %>%
 attach(avarage_research)
 avarage_research = avarage_research %>%
   add_row(
-    unit = "Mean",
+    unit = "All Units",
     R_var1 = round(mean(R_var1), 0),
     R_var2 = round(mean(R_var2), 0),
     R_var3 = round(mean(R_var3), 0),
@@ -410,6 +406,45 @@ avarage_research = avarage_research %>%
   )
 
 kable(avarage_research, caption = "Research skills rating, per unit") %>% kable_styling(bootstrap_options = "striped", font_size = 11) 
+```
+
+***
+### All units Avarage scores in Research.
+
+```{r echo=FALSE}
+research_plot <- select(avarage_research, unit, Mean)
+
+p = ggplot(research_plot, aes(unit, Mean, fill = unit)) +
+  geom_bar(stat = "identity") +
+  geom_text(aes(label = Mean), fontface = "bold") +
+  theme(
+    axis.text.x = element_blank(),
+    axis.title.x = element_blank(),
+    axis.ticks.x = element_blank(),
+    axis.text.y = element_text(
+      colour = "#7F7F7F",
+      size = 12,
+      face = "bold"
+    ),
+    axis.title.y = element_text(
+      colour = "#FE6F88",
+      size = 12,
+      face = "bold"
+    ),
+    legend.title = element_text(
+      colour = "#FE6F88",
+      size = 12,
+      face = "bold"
+    ),
+    legend.text = element_text(
+      colour = "#7F7F7F",
+      size = 9,
+      face = "bold"
+    )
+  )
+
+div(ggplotly(p) %>% config(displayModeBar = F) %>% layout(legend = list(x = 1, y = 1)), align = "center")
+
 ```
 
 ***
@@ -448,7 +483,7 @@ avarage_mne <- avarage_mne %>%
 attach(avarage_mne)
 avarage_mne = avarage_mne %>%
   add_row(
-    unit = "Mean",
+    unit = "All Units",
     M_var1 = round(mean(M_var1), 0),
     M_var2 = round(mean(M_var2), 0),
     M_var3 = round(mean(M_var3), 0),
@@ -468,6 +503,44 @@ kable(avarage_mne, caption = "Monitoring and Evaluation skills rating, per unit"
 ```
 
 ***
+### All units Avarage scores in Monitoring and Evaluation.
+```{r echo=FALSE}
+mne_plot <- select(avarage_mne, unit, Mean)
+
+p = ggplot(mne_plot, aes(unit, Mean, fill = unit)) +
+  geom_bar(stat = "identity") +
+  geom_text(aes(label = Mean), fontface = "bold") +
+  theme(
+    axis.text.x = element_blank(),
+    axis.title.x = element_blank(),
+    axis.ticks.x = element_blank(),
+    axis.text.y = element_text(
+      colour = "#7F7F7F",
+      size = 12,
+      face = "bold"
+    ),
+    axis.title.y = element_text(
+      colour = "#FE6F88",
+      size = 12,
+      face = "bold"
+    ),
+    legend.title = element_text(
+      colour = "#FE6F88",
+      size = 12,
+      face = "bold"
+    ),
+    legend.text = element_text(
+      colour = "#7F7F7F",
+      size = 9,
+      face = "bold"
+    )
+  )
+
+div(ggplotly(p) %>% config(displayModeBar = F) %>% layout(legend = list(x = 1, y = 1)), align = "center")
+```
+
+***
+
 ### **2.0) Rating MLIS Team members Skills in Learning.**
 MLIS team members were asked to rate there understanding and ability to undertake several learning tasks (Listed below) on a scale of 1 to 5, with **“1”** meaning Not knowledgeable at all, **“2”** Less knowledgeable, **“3”** A little more Knowledgeable, **“4”** “Sufficient Knowledge, and **“5”** Excellent knowledge.
 
@@ -507,7 +580,7 @@ avarage_learning <- avarage_learning %>%
 attach(avarage_learning)
 avarage_learning = avarage_learning %>%
   add_row(
-    unit = "Mean",
+    unit = "All Units",
     L_var1 = round(mean(L_var1), 0),
     L_var2 = round(mean(L_var2), 0),
     L_var3 = round(mean(L_var3), 0),
@@ -526,6 +599,44 @@ avarage_learning = avarage_learning %>%
     Mean = round(mean(Mean), 0)
   )
 kable(avarage_learning, caption = "Learning skills rating, per unit") %>% kable_styling(bootstrap_options = "striped", font_size = 11) 
+```
+
+***
+### All units Avarage scores in Learning.
+```{r echo=FALSE}
+
+learning_plot <- select(avarage_learning, unit, Mean)
+
+p = ggplot(learning_plot, aes(unit, Mean, fill = unit)) +
+  geom_bar(stat = "identity") +
+  geom_text(aes(label = Mean), fontface = "bold") +
+  theme(
+    axis.text.x = element_blank(),
+    axis.title.x = element_blank(),
+    axis.ticks.x = element_blank(),
+    axis.text.y = element_text(
+      colour = "#7F7F7F",
+      size = 12,
+      face = "bold"
+    ),
+    axis.title.y = element_text(
+      colour = "#FE6F88",
+      size = 12,
+      face = "bold"
+    ),
+    legend.title = element_text(
+      colour = "#FE6F88",
+      size = 12,
+      face = "bold"
+    ),
+    legend.text = element_text(
+      colour = "#7F7F7F",
+      size = 9,
+      face = "bold"
+    )
+  )
+
+div(ggplotly(p) %>% config(displayModeBar = F) %>% layout(legend = list(x = 1, y = 1)), align = "center")
 ```
 
 ***
@@ -564,7 +675,7 @@ avarage_dcollection <- avarage_dcollection %>%
 attach(avarage_dcollection)
 avarage_dcollection = avarage_dcollection %>%
   add_row(
-    unit = "Mean",
+    unit = "All Units",
     D_var1 = round(mean(D_var1), 0),
     D_var2 = round(mean(D_var2), 0),
     D_var3 = round(mean(D_var3), 0),
@@ -580,6 +691,43 @@ avarage_dcollection = avarage_dcollection %>%
   )
 
 kable(avarage_dcollection, caption = "Data collection skills rating, per unit") %>% kable_styling(bootstrap_options = "striped", font_size = 11) 
+```
+
+***
+### All units Avarage scores in Data Collection.
+```{r echo=FALSE}
+dcollection_plot <- select(avarage_dcollection, unit, Mean)
+
+p = ggplot(dcollection_plot, aes(unit, Mean, fill = unit)) +
+  geom_bar(stat = "identity") +
+  geom_text(aes(label = Mean), fontface = "bold") +
+  theme(
+    axis.text.x = element_blank(),
+    axis.title.x = element_blank(),
+    axis.ticks.x = element_blank(),
+    axis.text.y = element_text(
+      colour = "#7F7F7F",
+      size = 12,
+      face = "bold"
+    ),
+    axis.title.y = element_text(
+      colour = "#FE6F88",
+      size = 12,
+      face = "bold"
+    ),
+    legend.title = element_text(
+      colour = "#FE6F88",
+      size = 12,
+      face = "bold"
+    ),
+    legend.text = element_text(
+      colour = "#7F7F7F",
+      size = 9,
+      face = "bold"
+    )
+  )
+
+div(ggplotly(p) %>% config(displayModeBar = F) %>% layout(legend = list(x = 1, y = 1)), align = "center")
 ```
 
 ***
@@ -626,7 +774,7 @@ avarage_qqAnalysis <- avarage_qqAnalysis %>%
 attach(avarage_qqAnalysis)
 avarage_qqAnalysis = avarage_qqAnalysis %>%
   add_row(
-    unit = "Mean",
+    unit = "All Units",
     Qq_var1 = round(mean(Qq_var1), 0),
     Qq_var2 = round(mean(Qq_var2), 0),
     Qq_var3 = round(mean(Qq_var3), 0),
@@ -650,6 +798,45 @@ avarage_qqAnalysis = avarage_qqAnalysis %>%
   )
 
 kable(avarage_qqAnalysis, caption = "Qualitative and Quantitative Data management, analysis, and visualization packages skills rating, per unit") %>%  kable_styling(bootstrap_options = "striped", font_size = 11) 
+```
+
+***
+### All units Avarage scores in Qualitative and Quantitative Data management, analysis, and visualization packages.
+
+```{r echo=FALSE}
+qqAnalysis_plot <- select(avarage_qqAnalysis, unit, Mean)
+
+p = ggplot(qqAnalysis_plot, aes(unit, Mean, fill = unit)) +
+  geom_bar(stat = "identity") +
+  geom_text(aes(label = Mean), fontface = "bold") +
+  theme(
+    axis.text.x = element_blank(),
+    axis.title.x = element_blank(),
+    axis.ticks.x = element_blank(),
+    axis.text.y = element_text(
+      colour = "#7F7F7F",
+      size = 12,
+      face = "bold"
+    ),
+    axis.title.y = element_text(
+      colour = "#FE6F88",
+      size = 12,
+      face = "bold"
+    ),
+    legend.title = element_text(
+      colour = "#FE6F88",
+      size = 12,
+      face = "bold"
+    ),
+    legend.text = element_text(
+      colour = "#7F7F7F",
+      size = 9,
+      face = "bold"
+    )
+  )
+
+div(ggplotly(p) %>% config(displayModeBar = F) %>% layout(legend = list(x = 1, y = 1)), align = "center")
+
 ```
 
 ***
@@ -691,7 +878,7 @@ avarage_IFSystems <- avarage_IFSystems %>%
 attach(avarage_IFSystems)
 avarage_IFSystems = avarage_IFSystems %>%
   add_row(
-    unit = "Mean",
+    unit = "All units",
     IF_var1 = round(mean(IF_var1), 0),
     IF_var2 = round(mean(IF_var2), 0),
     IF_var3 = round(mean(IF_var3), 0),
@@ -712,5 +899,44 @@ avarage_IFSystems = avarage_IFSystems %>%
 kable(avarage_IFSystems, caption = "Data collection skills rating, per unit") %>% kable_styling(bootstrap_options = "striped", font_size = 11) 
 ```
 
+***
+### All units Avarage scores in Information Systems (IS).
+
+```{r echo=FALSE}
+IFSystems_plot <- select(avarage_IFSystems, unit, Mean)
+
+p = ggplot(IFSystems_plot, aes(unit, Mean, fill = unit)) +
+  geom_bar(stat = "identity") +
+  geom_text(aes(label = Mean), fontface = "bold") +
+  theme(
+    axis.text.x = element_blank(),
+    axis.title.x = element_blank(),
+    axis.ticks.x = element_blank(),
+    axis.text.y = element_text(
+      colour = "#7F7F7F",
+      size = 12,
+      face = "bold"
+    ),
+    axis.title.y = element_text(
+      colour = "#FE6F88",
+      size = 12,
+      face = "bold"
+    ),
+    legend.title = element_text(
+      colour = "#FE6F88",
+      size = 12,
+      face = "bold"
+    ),
+    legend.text = element_text(
+      colour = "#7F7F7F",
+      size = 9,
+      face = "bold"
+    )
+  )
+
+div(ggplotly(p) %>% config(displayModeBar = F) %>% layout(legend = list(x = 1, y = 1)), align = "center")
+
+
+```
 
 ***
