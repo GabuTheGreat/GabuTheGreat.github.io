@@ -7,6 +7,7 @@ library(plotly)
 #Read data into R
 cleaned_data <- read.csv("~/analysis_survey/cleaned_capacity.csv", header = TRUE, strip.white=TRUE)
 research <- read.csv("~/analysis_survey/Research_variables.csv")
+overall_score <- read.csv("~/GabuTheGreat.github.io/overall_Score.csv")
 
 ####
 #Unique departments

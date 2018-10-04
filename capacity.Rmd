@@ -5,18 +5,6 @@ date: "September 21, 2018"
 output:
   html_document: default
 ---
-
-## **Introduction**
-
-The MLIS Department undertook capacity assessment from 15th - 20th  of August 2018, in relation to Monitoring, Evaluation, Research and Learning. The purpose of the assessment was to identify the capacity gaps and develop a capacity building plan for MLIS staff.
-
-***
-### **1) Results**
-
-The analysis below was done on 43 responses from MLIS team members. 
-
-***
-
 ```{r include=FALSE}
 #load libraries
 library(ggplot2)
@@ -30,6 +18,66 @@ library(kableExtra)
 cleaned_data <- read.csv("~/analysis_survey/cleaned_capacity.csv", header = TRUE, strip.white=TRUE)
 ```
 
+
+## **Introduction**
+
+The MLIS Department undertook capacity assessment from 15th - 20th  of August 2018, in relation to Monitoring, Evaluation, Research and Learning. The purpose of the assessment was to identify the capacity gaps and develop a capacity building plan for MLIS staff.
+
+***
+### **1) Summary Results**
+
+The analysis below was done on 43 responses from MLIS team members. One of the key purpose was to test MLIS team members understanding in several key topics listed below:
+
+***
+* Research 
+* Monitoring and Evaluation 
+* Learning 
+* Data Collection  
+* Qualitative and Quantitative Data management, analysis, and visualization packages 
+* Information Systems (IS) 
+
+***
+The overall rating of MLIS knowledge in the above topics is graphed below.with “1” meaning Not knowledgeable at all, “2” Less knowledgeable, “3” A little more Knowledgeable, “4” “Sufficient Knowledge, and “5” Excellent knowledge. **Kindly hover above all graphs in this document to see more details**
+
+```{r echo=FALSE}
+overall_score <-
+  read.csv("~/GabuTheGreat.github.io/overall_Score.csv")
+
+
+p = ggplot(overall_score,
+           aes(Knowledge_Area, MLIS_Score, fill = Knowledge_Area)) +
+  geom_bar(stat = "identity") +
+  geom_text(aes(label = MLIS_Score), fontface = "bold") +
+  theme(
+    axis.text.x = element_blank(),
+    axis.title.x = element_blank(),
+    axis.ticks.x = element_blank(),
+    axis.text.y = element_text(
+      colour = "#7F7F7F",
+      size = 12,
+      face = "bold"
+    ),
+    axis.title.y = element_text(
+      colour = "#FE6F88",
+      size = 12,
+      face = "bold"
+    ),
+    legend.title = element_text(
+      colour = "#FE6F88",
+      size = 12,
+      face = "bold"
+    ),
+    legend.text = element_text(
+      colour = "#7F7F7F",
+      size = 9,
+      face = "bold"
+    )
+  )
+div(ggplotly(p) %>% config(displayModeBar = F) %>% layout(legend = list(x = 1, y = 1)),
+    align = "center")
+```
+
+***
 
 ### **1.1) MLIS Deparments** 
 
