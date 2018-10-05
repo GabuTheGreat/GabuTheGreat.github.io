@@ -988,3 +988,22 @@ div(ggplotly(p) %>% config(displayModeBar = F) %>% layout(legend = list(x = 1, y
 ```
 
 ***
+### **2.4) Additional Training Requirement Listed By MLIS team Members **
+
+Members of Field Monitoring team listed most of the additional training required, more than any other MLIS teams.
+
+```{r echo=FALSE}
+
+FMT_Training <- read.csv("~/GabuTheGreat.github.io/training_fmt.csv")
+kable(FMT_Training, caption = "Additional Training Required by FMT team") %>% kable_styling(bootstrap_options = c("striped", "hover", "condensed"))
+
+```
+
+***
+The other teams requisted additional training as tabulated below.
+
+```{r echo=FALSE}
+FMT_Training <- read.csv("~/GabuTheGreat.github.io/training_other.csv")
+kable(FMT_Training, caption = "Additional Training Required other MLIS teams") %>% kable_styling(bootstrap_options = c("striped", "hover", "condensed"))
+```
+

@@ -420,4 +420,10 @@ avarage_IFSystems = avarage_IFSystems %>%
   )
 View(avarage_IFSystems)
 
+## Additional training required.
+#** test_data = cleaned_data[!(is.na(cleaned_data$additional_training) | cleaned_data$additional_training == ""), ]
+test_data2 = filter(cleaned_data, additional_training != "")
 
+sample_clustered <- cleaned_data %>% select(unit,additional_training) %>% 
+                    filter(additional_training != "") %>% group_by(unit) %>%
+                    summarise(cluster = toString(unique(additional_training)))
