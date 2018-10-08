@@ -424,6 +424,39 @@ View(avarage_IFSystems)
 #** test_data = cleaned_data[!(is.na(cleaned_data$additional_training) | cleaned_data$additional_training == ""), ]
 test_data2 = filter(cleaned_data, additional_training != "")
 
+#Analysis on additional training required per unit
 sample_clustered <- cleaned_data %>% select(unit,additional_training) %>% 
                     filter(additional_training != "") %>% group_by(unit) %>%
                     summarise(cluster = toString(unique(additional_training)))
+
+#Analysis of other data collection software per unit
+Other_dataCollection <-
+  cleaned_data %>% select(unit, other_dcs) %>% 
+  filter(other_dcs != "") %>% group_by(unit) %>%
+  summarise(cluster = toString(unique(other_dcs)))
+
+#Analysis of other data Management software per unit
+
+Other_dataManagement <-
+  cleaned_data %>% select(unit, other_dms) %>% 
+  filter(other_dms != "" & other_dms != "N/A" & other_dms != "None") %>% group_by(unit) %>%
+  summarise(cluster = toString(unique(other_dms)))
+
+#Analysis of Other Information Systems software(s)
+
+Other_informationIS <-
+  cleaned_data %>% select(unit, other_Is) %>% 
+  filter(other_Is != "" & other_Is != "N/A" & other_Is != "None") %>% group_by(unit) %>%
+  summarise(cluster = toString(unique(other_Is)))
+
+#Analysis of Other Data Analysis software(s)
+Other_dataanalysis <-
+  cleaned_data %>% select(unit, other_da) %>% 
+  filter(other_da != "" & other_da != "N/A" & other_da != "None") %>% group_by(unit) %>%
+  summarise(cluster = toString(unique(other_da)))
+
+#### VI. Other Data Visualization software(s).
+Other_dataVizual <-
+  cleaned_data %>% select(unit, other_dv) %>% 
+  filter(other_dv != "" & other_dv != "N/A" & other_dv != "None"& other_dv != "Tableu;Cluvio") %>% group_by(unit) %>%
+  summarise(cluster = toString(unique(other_dv)))

@@ -1,6 +1,6 @@
 ---
 title: "Capacity Assesment Survey Results"
-author: "gabriel_mutua"
+author: "Data Learning"
 date: "September 21, 2018"
 output:
   html_document: default
@@ -1005,5 +1005,65 @@ The other teams requisted additional training as tabulated below.
 ```{r echo=FALSE}
 FMT_Training <- read.csv("~/GabuTheGreat.github.io/training_other.csv")
 kable(FMT_Training, caption = "Additional Training Required other MLIS teams") %>% kable_styling(bootstrap_options = c("striped", "hover", "condensed"))
+```
+
+
+### **2.5) Analysis on Other Software(s)Listed by MLIS to strengthen their skills **
+
+We asked MLIS members what other data management, Information systems, data analysis and data visualization software they would wish to strengthen their skills in, to enable them to perform bette. Their responses are tabulated below.
+
+#### I. Other Data Collection software(s)
+
+```{r echo=FALSE}
+Other_dataCollection <-
+  cleaned_data %>% select(unit, other_dcs) %>% 
+  filter(other_dcs != "") %>% group_by(unit) %>%
+  summarise(Software = toString(unique(other_dcs)))
+
+kable(Other_dataCollection, caption = "Other Data Collection Softwares to Stregthen Skills In") %>% kable_styling(bootstrap_options = c("striped", "hover", "condensed"))
+```
+
+#### II. Other Data management software(s)
+
+```{r echo=FALSE}
+Other_dataManagement <-
+  cleaned_data %>% select(unit, other_dms) %>% 
+  filter(other_dms != "" & other_dms != "N/A" & other_dms != "None") %>% group_by(unit) %>%
+  summarise(Software = toString(unique(other_dms)))
+
+kable(Other_dataManagement, caption = "Other Data Management Softwares to Stregthen Skills In") %>% kable_styling(bootstrap_options = c("striped", "hover", "condensed"))
+```
+
+#### IV. Other Information Systems software(s).
+
+```{r echo=FALSE}
+Other_informationIS <-
+  cleaned_data %>% select(unit, other_Is) %>% 
+  filter(other_Is != "" & other_Is != "N/A" & other_Is != "None") %>% group_by(unit) %>%
+  summarise(Software = toString(unique(other_Is)))
+
+kable(Other_informationIS, caption = "Other Information System Softwares to Stregthen Skills In") %>% kable_styling(bootstrap_options = c("striped", "hover", "condensed"))
+```
+
+#### V. Other  Data Analysis software(s).
+
+```{r echo=FALSE}
+Other_dataanalysis <-
+  cleaned_data %>% select(unit, other_da) %>% 
+  filter(other_da != "" & other_da != "N/A" & other_da != "None") %>% group_by(unit) %>%
+  summarise(Software = toString(unique(other_da)))
+
+kable(Other_dataanalysis, caption = "Other Data Analysis Softwares to Stregthen Skills In") %>% kable_styling(bootstrap_options = c("striped", "hover", "condensed"))
+```
+
+#### VI. Other Data Visualization software(s).
+
+```{r echo=FALSE}
+Other_dataVizual <-
+  cleaned_data %>% select(unit, other_dv) %>% 
+  filter(other_dv != "" & other_dv != "N/A" & other_dv != "None"& other_dv != "Tableu;Cluvio") %>% group_by(unit) %>%
+  summarise(Software = toString(unique(other_dv)))
+
+kable(Other_dataVizual, caption = "Other Data Vizualization Softwares to Stregthen Skills In") %>% kable_styling(bootstrap_options = c("striped", "hover", "condensed"))
 ```
 
