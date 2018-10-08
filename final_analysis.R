@@ -460,3 +460,27 @@ Other_dataVizual <-
   cleaned_data %>% select(unit, other_dv) %>% 
   filter(other_dv != "" & other_dv != "N/A" & other_dv != "None"& other_dv != "Tableu;Cluvio") %>% group_by(unit) %>%
   summarise(cluster = toString(unique(other_dv)))
+
+##Knowledge and skills in Research Monitoring 
+knowledge_skillBy <- cleaned_data %>% filter(skill_me != "") %>% group_by(skill_me)
+table_kwld <- summarise(knowledge_skillBy, count = n()) %>% mutate(Percantage = paste(round((count/sum(count)*100),0),"%", sep = ""))
+View(table_kwld) 
+
+##Requirement of another tools to work on
+Tools_By <- cleaned_data %>% filter(tools != "") %>% group_by(tools)
+table_tools <- summarise(Tools_By, count = n()) %>% mutate(Percantage = paste(round((count/sum(count)*100),0),"%", sep = ""))
+View(table_tools)
+
+##Tools required per unit.
+tools_requested <-
+  cleaned_data %>% select(unit, other_tool) %>% 
+  filter(other_tool != "") %>% group_by(unit) %>%
+  summarise(Tools = toString(unique(other_tool)))
+
+##Other Specified tools
+Othertools_requested <-
+  cleaned_data %>% select(unit, specify_tool) %>% 
+  filter(specify_tool != "" & specify_tool != "N/A" & specify_tool != "LAPTOPS" & specify_tool != "laptop" ) %>% group_by(unit) %>%
+  summarise(Tools = toString(unique(specify_tool)))
+
+View(Othertools_requested)

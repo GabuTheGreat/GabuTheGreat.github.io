@@ -1010,9 +1010,10 @@ kable(FMT_Training, caption = "Additional Training Required other MLIS teams") %
 
 ### **2.5) Analysis on Other Software(s)Listed by MLIS to strengthen their skills **
 
-We asked MLIS members what other data management, Information systems, data analysis and data visualization software they would wish to strengthen their skills in, to enable them to perform bette. Their responses are tabulated below.
+We asked MLIS members what other data management, Information systems, data analysis and data visualization software they would wish to strengthen their skills in, to enable them to perform bette. 
 
-#### I. Other Data Collection software(s)
+#### **I. Other Data Collection software(s)**
+We asked MLIS team members to list other data collection softwares they would like to strengthen their skills in. Their responses are tabuleted below per unit.
 
 ```{r echo=FALSE}
 Other_dataCollection <-
@@ -1023,7 +1024,9 @@ Other_dataCollection <-
 kable(Other_dataCollection, caption = "Other Data Collection Softwares to Stregthen Skills In") %>% kable_styling(bootstrap_options = c("striped", "hover", "condensed"))
 ```
 
-#### II. Other Data management software(s)
+#### **II. Other Data management software(s)**
+
+Other Data management software MLIS team members would like to stregthen their skills in.
 
 ```{r echo=FALSE}
 Other_dataManagement <-
@@ -1034,7 +1037,9 @@ Other_dataManagement <-
 kable(Other_dataManagement, caption = "Other Data Management Softwares to Stregthen Skills In") %>% kable_styling(bootstrap_options = c("striped", "hover", "condensed"))
 ```
 
-#### IV. Other Information Systems software(s).
+#### **IV. Other Information Systems software(s).**
+
+Other Information Systems software MLIS team members would like to stregthen their skills in.
 
 ```{r echo=FALSE}
 Other_informationIS <-
@@ -1045,7 +1050,9 @@ Other_informationIS <-
 kable(Other_informationIS, caption = "Other Information System Softwares to Stregthen Skills In") %>% kable_styling(bootstrap_options = c("striped", "hover", "condensed"))
 ```
 
-#### V. Other  Data Analysis software(s).
+#### **V. Other Data Analysis software(s).**
+
+Other Data Analysis software MLIS team members would like to stregthen their skills in.
 
 ```{r echo=FALSE}
 Other_dataanalysis <-
@@ -1056,7 +1063,9 @@ Other_dataanalysis <-
 kable(Other_dataanalysis, caption = "Other Data Analysis Softwares to Stregthen Skills In") %>% kable_styling(bootstrap_options = c("striped", "hover", "condensed"))
 ```
 
-#### VI. Other Data Visualization software(s).
+#### **VI. Other Data Visualization software(s).**
+
+Other Data Visualization software MLIS team members would like to stregthen their skills in.
 
 ```{r echo=FALSE}
 Other_dataVizual <-
@@ -1065,5 +1074,68 @@ Other_dataVizual <-
   summarise(Software = toString(unique(other_dv)))
 
 kable(Other_dataVizual, caption = "Other Data Vizualization Softwares to Stregthen Skills In") %>% kable_styling(bootstrap_options = c("striped", "hover", "condensed"))
+```
+
+### **2.6) Analysis on Knowledge and skills in Research Monitoring**
+
+All partcipants were asked to rate their skills in research and monitoring. The results of the analysis of their responses his tabulated below.
+
+```{r echo=FALSE}
+knowledge_skillBy <- cleaned_data %>% filter(skill_me != "") %>% group_by(skill_me)
+table_kwld <- summarise(knowledge_skillBy, count = n()) %>% mutate(Percantage = paste(round((count/sum(count)*100),0),"%", sep = ""))
+
+table_kwld  = arrange(table_kwld , desc(count))
+kable(table_kwld , caption = "Knowledge and Skills in  Research and Monitoring") %>%  kable_styling(bootstrap_options = "striped", full_width = F)
+```
+
+### **2.7) MLIS Team Members in Need of an Extra Tool(s) **
+
+MLIS team members were asked if there is any tools they would wish to obtain in order to enable them perform their work better.
+Sixt nine percent **(69 percent)** of MLIS members listed that, they would need to acquire a certain tool to enable them work better.
+
+```{r echo=FALSE}
+Tools_By <- cleaned_data %>% filter(tools != "") %>% group_by(tools)
+table_tools <- summarise(Tools_By, count = n()) %>% mutate(Percantage = paste(round((count/sum(count)*100),0),"%", sep = ""))
+
+table_tools  = arrange(table_tools, desc(count))
+kable(table_tools, caption = "Percentage of MLIS Team Members in Need of a Tool(s)") %>%  kable_styling(bootstrap_options = "striped", full_width = F)
+```
+
+### **2.8) Tools listed by MLIS Members **
+
+We analysed the responses of MLIS team members, and the table below lists tools requsted per unit.
+
+```{r echo=FALSE}
+tools_requested <-
+  cleaned_data %>% select(unit, other_tool) %>% 
+  filter(other_tool != "") %>% group_by(unit) %>%
+  summarise(Tools = toString(unique(other_tool)))
+
+kable(tools_requested, caption = "Tools Required Per Unit") %>% kable_styling(bootstrap_options = c("striped", "hover", "condensed"))
+
+```
+
+### **2.9) Other listed tools **
+
+We asked MLIS members to list tools they would require if they were noted listed in the previous querstion.
+
+```{r echo=FALSE}
+Othertools_requested <-
+  cleaned_data %>% select(unit, specify_tool) %>% 
+  filter(specify_tool != "" & specify_tool != "N/A" & specify_tool != "LAPTOPS" & specify_tool != "laptop" ) %>% group_by(unit) %>%
+  summarise(Tools = toString(unique(specify_tool)))
+
+kable(Othertools_requested, caption = "Tools Required Per Unit") %>% kable_styling(bootstrap_options = c("striped", "hover", "condensed"))
+```
+
+### **3.0) Final Remarks **
+
+We asked MLIS team members to list their final remarks concerning the whole exercise. This is what they listed down.
+
+```{r echo=FALSE}
+remarks <- cleaned_data %>% select(remarks) %>% 
+           filter(remarks != "N/A" & remarks != "None" & remarks != "Not applicable" & remarks != "N/a" & remarks != "")
+
+kable(remarks, caption = "Final Remarks by MLIS Team Members") %>% kable_styling(bootstrap_options = c("striped", "hover", "condensed"))
 ```
 
