@@ -1,0 +1,242 @@
+---
+title: "Interview Tasks"
+author: "Gabriel Mutua"
+date: "25th December,2018"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## **Introduction**
+You have been provided with data on mortality in Kenya. This data can be useful in informing products for life insurance products. There are several analysis that can be conducted to enable  make better decisions for creating and marketing of life insurance products. These analyses will form part of your interview.
+
+### ***Task 1***
+Create a Kaplan-meier survival curve using one of the following variables; gender, colour, fundraising, spouse alive, spouse gender. Explain the difference/significance of the result. 
+
+#### ***Answer***
+
+##### ***Step 1 Data Preparation***
+
+I started by doing data preparation in Python. I was interested to know out of the given variables that is (gender, colour, fundraising, spouse alive, spouse gender) which one would affect mortality rate of an individual. I started by investigating *** Gender variable *** and it's impact on mortality. 
+
+I performed the following data preparations tasks.
+
+1. Loading the  dataset.
+2. Getting variables of interest Age and Gender.
+3. Removing nan value from the newly created dataframe.
+4. Creating new column Gender_Status which binary (1 if spouse is Male and 0 when Female ).
+5. Write data again back to a .csv file.
+6. Checking basic stats.
+
+```{python}
+import pandas as pd
+#1) Load dataset
+all_data = pd.read_csv(r"C:\Users\Gabriel Mutua\Documents\GabuTheGreat.github.io\challange\Obituaries_Dataset.csv", encoding = "ISO-8859-1")
+
+#2) Get variables of interest Age and Spouse_alive
+all_data = all_data[['Age','Gender']]
+
+#3) Remove nan value from the newly created dataframe
+all_data = all_data.dropna(how='any',axis=0)
+
+#4) Create new column Spouse_Alive_Status which binary (1 if spouse is alive and 0 when not )
+def gender_status(x):
+    if "Male" in x:
+        return 1
+    elif "Female" in x:
+        return 0
+    else: return "nan"
+    
+all_data['Gender_Status'] = all_data['Gender'].apply(gender_status)
+
+#5) Write data again back to a .csv file
+#all_data.to_csv(r"C:\Users\Gabriel #Mutua\Documents\GabuTheGreat.github.io\challange\survival_gender.csv", #sep=',', encoding='utf-8', index=False)
+
+
+print(all_data.head(10))
+#view the first 10 rows
+
+
+print(all_data.describe()['Age'])
+#View overall stats for age.
+
+print(all_data.groupby("Gender").mean())
+#View overall stats grouped by spouse_alive
+```
+
+##### ***Step 2 Creating a Kaplan-meier survival curve***
+
+First I calculated the Kaplan-Meier estimate in R  using survfit() function from survival package. I checked the summary of the calculated value. Then plotted the Kaplan-meier survival curve.
+
+```{r}
+#load required library
+library("survival")
+
+#Load processed data
+survival_data <- read.csv("survival_gender.csv", header = TRUE)
+
+#Calculating the Kaplan-Meier estimate
+KM_fit <- survfit(Surv(Age, Gender_Status) ~ 1, data = survival_data)
+
+#Print calculated value
+print(KM_fit)
+
+plot(KM_fit, xlab = "Time to Death (Years)", ylab = "Survival Probability", 
+     main = "Kaplan-Meier Estimate of S(t) for the Daily Nation Data")
+
+```
+
+***Explain the difference/significance of the result.***
+
+According to the provided data set, it's clear that as age advances the survival probability drastically reduces.
+
+### ***Task 2***
+
+Predict deaths that are likely to need fundraising. Use algorithm of your own choice. Include the confusion matrix, F1 score, sensitivity, and specificity.
+
+#### ***Answer***
+
+##### ***Step 1 Data Preparation***
+
+I started the process of data preparation in Python. I performed the following procedures on the data set.
+
+1. Getting the data type of all columns. So that I can establish columns to use in my analysis.
+2. Creating a new dataframe with variables to be used in the prediction.
+3. Creating a new fundraising status column. If fundraising is yes fundraising status = 1, if no = 0.
+3. Removing all nan value in the data frame
+```{python}
+import pandas as pd
+
+all_data = pd.read_csv(r"C:\Users\Gabriel Mutua\Documents\GabuTheGreat.github.io\challange\Obituaries_Dataset.csv", encoding = "ISO-8859-1")
+
+#1) Getting data types of all columns
+all_data.dtypes
+#2) Taking the varibles to be used in the model.
+all_data_machine = all_data[['Fundraising','Age','No_of_Children','No_of_Relatives']]
+#Drop all nan
+all_data_machine = all_data_machine.dropna(how='any',axis=0)
+#3) Function to create new binary column 1 = Fundraising = Yes 0, fundraising = 0 
+def fund_status(x):
+    if "Yes" in x:
+        return 1
+    elif "No" in x:
+        return 0
+    else: return "nan"
+    
+all_data_machine['Fundraising_Status'] = all_data_machine['Fundraising'].apply(fund_status)
+
+#Re-arranging the columns
+all_data_machine = all_data_machine[['Age','No_of_Children','No_of_Relatives','Fundraising','Fundraising_Status']]
+#Convert the data type of 'No_of_Relatives'
+all_data_machine['No_of_Relatives'] = pd.to_numeric(all_data_machine['No_of_Relatives'],errors='coerce')
+#4)Remove nan value from the newly created dataframe
+all_data_machine = all_data_machine.dropna(how='any',axis=0)
+#print the shape of the data frame
+print(all_data_machine.shape)
+```
+
+##### ***Step 2 Splitting the data.***
+I setttled for a logistic regression, which is extension of linear regression where the dependent variable is categorical and not continuous.
+I fitted the model using R.
+
+```{r}
+#Reading data into R
+task2_data = read.csv("survival_data.csv", header = TRUE)
+
+#Analysing quality of the data set
+str(task2_data)
+```
+
+We have 439 observations, one for each of the deaths in our data set, and 5 different variables. The 3 variables from Ages to No_of_Relatives are the independent variables while Fundraising_Status is the dependent/outcome variable.
+
+Since we have only one data set, we want to randomly split our data set into a training set and testing set. Testing set is essential to validate our results.
+```{r}
+#Using CaTools to randomly divide the data into Training and Test set
+library(caTools)
+set.seed(67)
+split = sample.split(task2_data$Fundraising_Status, SplitRatio = 0.75)
+
+task2_Train = subset(task2_data, split == TRUE)
+task2_Test = subset(task2_data, split == FALSE)
+
+#Dimensions of task2_Train
+print(dim(task2_Train))
+#Dimensions of task2_Test
+print(dim(task2_Test))
+```
+
+##### ***Step 3 Fitting logistic model***
+Now, we are ready to build a logistic regression model using Age,No_of_Relatives and No_of_Children as independent variables.We’ll call our model glm.fit and use the “glm” function.
+```{r}
+#fitting the model
+glm.fit = glm(Fundraising_Status ~  Age + No_of_Children + No_of_Relatives,data=task2_Train, family=binomial)
+#check the model summary
+print(summary(glm.fit))
+
+```
+
+The coefficients table gives the estimate values for the coefficients,or the betas, for our logistic regression model.We see here that the coefficients for No_of_Children and No_of_Relatives are both positive, which means that higher values in these two variables are indicative of need to have a fundraiser.
+
+##### ***Step 4 Making predictions on Training set***
+```{r warning=FALSE}
+glm.probs <- predict(glm.fit,type = "response")
+
+#I'll turn the probabilities into classifications by thresholding at 0.6.
+#In order to do so, I use an ifelse() command
+glm.pred <- ifelse(glm.probs > 0.6, 0, 1)
+
+#Create confusion Matrix
+attach(task2_Train)
+print(table(glm.pred,Fundraising_Status))
+
+#Check the overall accuracy in percentage
+print((mean(glm.pred == Fundraising_Status))*100)
+
+# Sensitivity
+print((44/(31+44))*100)
+
+# Specificity
+print((93/(93 + 161))*100)
+
+```
+
+After testing with several threshholds, I saw that by increasing the threshold value, the model’s sensitivity decreases and specificity increases while the reverse happens if the threshold value is decreased.
+
+##### ***Step 5 Choosing optimum threshold value***
+```{r}
+predictTrain = predict(glm.fit, type="response")
+
+library(ROCR)
+ROCRpred = prediction(predictTrain, task2_Train$Fundraising_Status)
+ROCRperf = performance(ROCRpred, "tpr", "fpr")
+plot(ROCRperf)
+plot(ROCRperf, colorize=TRUE)
+plot(ROCRperf, colorize=TRUE, print.cutoffs.at=seq(0,1,by=0.1), text.adj=c(-0.2,1.7))
+```
+
+The sensitivity, or true positive rate of the model, is shown on the y-axis.while the false positive rate, or 1 minus the specificity, is given on the x-axis. The line shows how these two outcome measures vary with different threshold values.
+
+A threshold around (0.6, 0.65) on this ROC curve looks like a good choice in this case.
+
+##### ***Step 6 Prediction on Test Set***
+```{r warning=FALSE}
+glm.probs <- predict(glm.fit,type = "response",newdata = task2_Test)
+glm.pred <- ifelse(glm.probs > 0.65, 0, 1)
+attach(task2_Test)
+table(glm.pred,Fundraising_Status)
+
+#Check the overall accuracy in percentage
+print(mean(glm.pred == Fundraising_Status)*100)
+
+# Sensitivity
+print((50/(35+50))*100)
+
+# Specificity
+print((7/(7 + 18))*100)
+
+
+```
+
+
