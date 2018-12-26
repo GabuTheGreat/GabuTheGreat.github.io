@@ -84,7 +84,7 @@ summary(glm.probs)
 glm.pred <- ifelse(glm.probs > 0.65, 0, 1)
 
 #Create confusion Matrix
-attach(task2_data)
+attach(task2_Train)
 table(glm.pred,Fundraising_Status)
 
 mean(glm.pred == Fundraising_Status)

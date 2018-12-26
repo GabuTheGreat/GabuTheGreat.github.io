@@ -35,13 +35,13 @@ import pandas as pd
 #1) Load dataset
 all_data = pd.read_csv(r"C:\Users\Gabriel Mutua\Documents\GabuTheGreat.github.io\challange\Obituaries_Dataset.csv", encoding = "ISO-8859-1")
 
-#2) Get variables of interest Age and Spouse_alive
+#2) Get variables of interest Age and Gender
 all_data = all_data[['Age','Gender']]
 
 #3) Remove nan value from the newly created dataframe
 all_data = all_data.dropna(how='any',axis=0)
 
-#4) Create new column Spouse_Alive_Status which binary (1 if spouse is alive and 0 when not )
+#4) Create new column Gender_Status which binary (1 if spouse is alive and 0 when not )
 def gender_status(x):
     if "Male" in x:
         return 1
@@ -63,7 +63,7 @@ print(all_data.describe()['Age'])
 #View overall stats for age.
 
 print(all_data.groupby("Gender").mean())
-#View overall stats grouped by spouse_alive
+#View overall stats grouped by Gender
 ```
 
 ##### ***Step 2 Creating a Kaplan-meier survival curve***
